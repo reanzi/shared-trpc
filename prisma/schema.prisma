@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_LOCAL")
+}
+
+model User {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String         @unique
+  password      String
+  provider      String?
+  photo         String?
+  verified      Boolean?       @default(false)
+  roles         Int[]          @default([22050])
+  refreshTokens RefreshToken[]
+  // role          Role           @relation(fields: [roleId], references: [id])
+  // roleId        String         @db.ObjectId
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  Task          Task[]
+  Role          Role?          @relation(fields: [roleId], references: [id])
+  roleId        String?        @db.ObjectId
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  hashedToken String
+  userId      String   @db.ObjectId
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revoked     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("refreshTokens")
+}
+
+model Role {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  code      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User[]
+
+  @@map("roles")
+}
+
+model Task {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  favourite Boolean
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String  @db.ObjectId
+
+  @@map("tasks")
+}
+
+// enum Role {
+//   ROOT
+//   ADMIN
+//   MODERATOR
+//   MEMBER
+//   USER
+// }
