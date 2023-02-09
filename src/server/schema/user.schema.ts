@@ -1,9 +1,13 @@
-import { object, string, TypeOf } from 'zod';
+import { z, object, string, TypeOf } from 'zod';
 
+const profilePhoto = z
+    .union([z.string().length(0), z.string().min(4)])
+    .optional()
+    .transform(e => e === "" ? undefined : e);
 export const createUserSchema = object({
     name: string({ required_error: 'Name is required' }),
     email: string({ required_error: 'Email is required' }).email('Invalid email'),
-    photo: string({ required_error: 'Photo is required' }),
+    photo: string({ required_error: 'Photo is required' }).optional(),
     password: string({ required_error: 'Password is required' })
         .min(8, 'Password must be more than 8 characters')
         .max(32, 'Password must be less than 32 characters'),

@@ -4,7 +4,7 @@ export type IUser = {
     email: string;
     name: string;
     role: string;
-    photo: string;
+    photo?: string;
     updatedAt: string;
     createdAt: string;
 };

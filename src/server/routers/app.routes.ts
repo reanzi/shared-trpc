@@ -6,7 +6,7 @@ import userRouter from "./user.routes";
 
 // Procedures
 const publicRouter = t.router({
-    hello: t.procedure.query(async ({ ctx }) => {
+    getHello: t.procedure.query(async ({ ctx }) => {
         const message = await redisClient.get("trpc");
         return { message };
     }),
