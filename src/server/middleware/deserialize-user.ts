@@ -38,7 +38,7 @@ export const deserializeUser = async ({
             access_token,
             'accessTokenPublicKey'
         );
-
+        console.log({ decoded })
         if (!decoded) {
             return notAuthenticated;
         }
@@ -47,6 +47,7 @@ export const deserializeUser = async ({
         const session = await redisClient.get(decoded.sub);
 
         if (!session) {
+            console.log('No stored session')
             return notAuthenticated;
         }
 
