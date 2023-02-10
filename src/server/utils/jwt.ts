@@ -7,6 +7,7 @@ export const signJwt = (
     options: SignOptions = {}
 ) => {
     const privateKey = Buffer.from(customConfig[key], 'base64').toString('ascii');
+    // console.log("Private Key: ", privateKey)
     return jwt.sign(payload, privateKey, {
         ...(options && options),
         algorithm: 'RS256',

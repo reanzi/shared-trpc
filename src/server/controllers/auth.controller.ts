@@ -42,7 +42,7 @@ export const registerHandler = async ({
     input: CreateUserInput;
 }) => {
     try {
-        const hashedPassword = await hash(input.password.trim(), 10);
+        const hashedPassword = await hash(input.password.trim(), 12);
         const user = await createUser({
             email: input.email,
             name: input.name,
@@ -81,7 +81,7 @@ export const loginHandler = async ({
         const user = await findUser({ email: input.email });
 
         const isMatch = (await compare(input.password.trim(), user.password))
-        const given = await hash(input.password.trim(), 10)
+        const given = await hash(input.password.trim(), 12)
         console.log("User: ", { isMatch, dbPass: user?.password, userPlain: input.password, userHashed: given })
         // Check if user exist and password is correct
         if (!user) {
