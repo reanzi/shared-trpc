@@ -7,3 +7,12 @@ const omitFields = (obj: any, ...props: string[]) => {
 };
 
 export default omitFields;
+
+/**
+ usage
+response.body = {
+      status: "success",
+      user: omitFields(user, "password", "verified"),
+    };
+
+ */
