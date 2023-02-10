@@ -1,6 +1,5 @@
 // [...] Imports
 import { TRPCError } from '@trpc/server';
-import bcrypt from 'bcryptjs';
 import { OptionsType } from 'cookies-next/lib/types';
 import { getCookie, setCookie } from 'cookies-next';
 import customConfig from '../config/default';
@@ -14,6 +13,7 @@ import {
 import { signJwt, verifyJwt } from '../utils/jwt';
 import { Context } from '../create-context';
 import redisClient from '../utils/redis';
+import { compare, hash } from 'bcrypt';
 
 // [...] Cookie options
 const cookieOptions: OptionsType = {
@@ -42,7 +42,7 @@ export const registerHandler = async ({
     input: CreateUserInput;
 }) => {
     try {
-        const hashedPassword = await bcrypt.hash(input.password.trim(), 10);
+        const hashedPassword = await hash(input.password.trim(), 10);
         const user = await createUser({
             email: input.email,
             name: input.name,
@@ -80,8 +80,8 @@ export const loginHandler = async ({
         // Get the user from the collection
         const user = await findUser({ email: input.email });
 
-        const isMatch = (await bcrypt.compare(input.password.trim(), user.password))
-        const given = await bcrypt.hash(input.password.trim(), 10)
+        const isMatch = (await compare(input.password.trim(), user.password))
+        const given = await hash(input.password.trim(), 10)
         console.log("User: ", { isMatch, dbPass: user?.password, userPlain: input.password, userHashed: given })
         // Check if user exist and password is correct
         if (!user || !isMatch) {
