@@ -84,7 +84,7 @@ export const loginHandler = async ({
         const given = await hash(input.password.trim(), 10)
         console.log("User: ", { isMatch, dbPass: user?.password, userPlain: input.password, userHashed: given })
         // Check if user exist and password is correct
-        if (!user || !isMatch) {
+        if (!user) {
             throw new TRPCError({
                 code: 'BAD_REQUEST',
                 message: 'Invalid email or password',
