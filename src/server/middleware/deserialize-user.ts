@@ -13,6 +13,7 @@ export const deserializeUser = async ({
 }) => {
     try {
         // Get the token
+        console.log("Token: ", { req })
         let access_token;
         if (
             req.headers.authorization &&
